@@ -1,0 +1,75 @@
+/=================================Button====================================//
+var D = 2000;        
+var P = -40;    
+    
+var legendJournal = svg.append("rect")
+    .attr("x", -1050)
+    .attr("y", -100 + P)
+    .attr("width", 20) 
+    .attr("height", 20)
+    .attr('fill', '#96A063')
+
+var legendBook = svg.append("rect")
+    .attr("x", -1050)
+    .attr("y", -50 + P)
+    .attr("width", 20) 
+    .attr("height", 20)
+    .attr('fill', '#6A6E2B')
+
+var legendMusic = svg.append("rect")
+    .attr("x", -1050)
+    .attr("y", 0 + P)
+    .attr("width", 20) 
+    .attr("height", 20)
+    .attr('fill', '#bcc87c')
+
+var legendMap = svg.append("rect")
+    .attr("x", -1050)
+    .attr("y", 50 + P)
+    .attr("width", 20) 
+    .attr("height", 20)
+    .attr('fill', '#e98d3f')
+
+var legendPictures = svg.append("rect")
+    .attr("x", -1050)
+    .attr("y", 100 + P)
+    .attr("width", 20) 
+    .attr("height", 20)
+    .attr('fill', '#e3c44f')
+
+var legendDiaries = svg.append("rect")
+    .attr("x", -1050)
+    .attr("y", 150 + P)
+    .attr("width", 20) 
+    .attr("height", 20)
+    .attr('fill', '#996633')
+
+var Ltext1 = svg.append('text').text('Journals')
+    .attr('x', -1020)
+    .attr('y', -85 + P)
+    .attr('fill', 'black')   
+
+var Ltext2 = svg.append('text').text('Books')
+    .attr('x', -1020)
+    .attr('y', -35 + P)
+    .attr('fill', 'black')
+
+var Ltext3 = svg.append('text').text('Music')
+    .attr('x', -1020)
+    .attr('y', 15 + P)
+    .attr('fill', 'black')
+
+var Ltext4 = svg.append('text').text('Maps')
+    .attr('x', -1020)
+    .attr('y', 65 + P)
+    .attr('fill', 'black')
+
+var Ltext5 = svg.append('text').text('Pictures')
+    .attr('x', -1020)
+    .attr('y', 115 + P)
+    .attr('fill', 'black')
+
+var Ltext6 = svg.append('text').text('Diaries')
+    .attr('x', -1020)
+    .attr('y', 165 + P)
+    .attr('fill', 'black')
