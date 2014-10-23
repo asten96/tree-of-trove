@@ -158,15 +158,38 @@
           height: 100px;
           border-radius: 100%;
       }
+
+      #searchInput {
+        position: absolute;
+        right: 1%;
+      }
+
+      #searchButton {
+        position: relative;
+        padding: 6px 15px;
+        left: -8px;
+        border: 2px solid #207cca;
+        background-color: #207cca;
+        color: #fafafa;
+      }
+
+      #searchButton:hover  {
+        background-color: #fafafa;
+        color: #207cca;
+      }
+
+      #searchTerm {
+        padding:7px 15px;
+        background: white;
+      }
+      
     </style>
   </head>
   <body>
       <form action="#" id="searchInput">
-        <input id="searchArg" type="text">
-        <button type="submit" id="searchButton">Search For Images!</button>
+        <input id="searchTerm" type="text">
+        <button type="submit" id="searchButton" onclick ="start_search()">Search For Images!</button>
       </form>
-      <button type="submit" class="btn btn-default" id="searchbtn" onclick ="start_search()">Search</button>
-  <input id="searchTerm" type ="text"> 
           <div id="out0put" class="output">
       </div>
           <div id="out1put" class="output">
@@ -218,16 +241,16 @@
           $("form#searchInput").submit();
           $("form#searchInput").submit(function() {
             clearImages();
-            var searchArg = $("#searchArg").val().trim();
+            var searchArg = $("#searchTerm").val().trim();
             searchArg = searchArg.replace(/ /g,"%20");
             var url = "http://api.trove.nla.gov.au/result?key=" 
             + troveKey + "&l-availability=y%2Ff&encoding=json&zone=picture" 
             + "&sortby=relevance&n=100&q=" + searchArg + "&callback=?";
-            $.getJSON(url, function(data) {
-              for (i = 0; i < 12; i++) {
+            for (i = 0; i < 12; i++) {
                 $('#out'+i+'put').empty();
                 $('#out'+i+'put').fadeOut(10);
-              }
+            }
+            $.getJSON(url, function(data) {
               $('#out0put').fadeIn(5000);
               $('#out1put').delay(1000).fadeIn(5000);
               $('#out2put').delay(2000).fadeIn(5000);
