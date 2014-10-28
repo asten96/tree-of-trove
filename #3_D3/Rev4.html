@@ -1438,11 +1438,49 @@ function start_search(search) {
     
 //=================================MouseOver====================================//
     
-var mouseOpt = "1";    
+var mouseOpt = "1";
+
+var tooltip = d3.select("body")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("opacity", 0);
     
 Ring100.on('mouseover', function() {Ring100.attr("fill-opacity", mouseOpt)});
+Ring100.on("mouseover", function(d) {
+          tooltip.html(function() {
+              var name = "Books";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+
 Ring100.on('mouseout', function() {Ring100.attr("fill-opacity", Tran)});
 Ring101.on('mouseover', function() {Ring101.attr("fill-opacity", mouseOpt)});
+Ring101.on("mouseover", function(d) {
+          tooltip.html(function() {
+              var name = "Journals";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
 Ring101.on('mouseout', function() {Ring101.attr("fill-opacity", Tran)});
 Ring102.on('mouseover', function() {Ring102.attr("fill-opacity", mouseOpt)});
 Ring102.on('mouseout', function() {Ring102.attr("fill-opacity", Tran)});
