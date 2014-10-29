@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<!--<link rel="stylesheet" type="text/css" href="bgstyle.css"> -->
+<!--<embed name="lostmojo" src="fairies in the forest.mp3" loop="false" hidden="true" autostart="true"> -->
+<html>
+  <head>
+    <title>Pie Chart</title>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <style>
+    
+      body {
+        /*background-color: #F6F6F6;*/
+        background-image: url("bg.png");
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-position: 0% 0%;
+      }
+
+      img {
+        border-radius:100%;
+        width: 75px;
+        height: 75px;
+        max-width: 100%;
+        max-height: 100%;
+        border-color: white;
+        -webkit-transition: width 0.5s, height 0.5s;
+        transition: width 0.5s, height 0.5s;
+      }
+
+      .images:hover {
+        border-radius:100%;
+        width: 100px;
+        height: 100px;
+        max-width: 100%;
+        max-height: 100%;
+        -webkit-transition: width 0.5s, height 0.5s;
+        transition: width 0.5s, height 0.5s;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      h3 {
+        text-align: center;
+      }
+
+      /* 12 */
+      #out0put { 
+        position: absolute;
+        left: 70%;
+        top: 25%;
+      }
+
+      /* 6 */
+      #out6put {
+        position: absolute;
+        left: 75%;
+        top: 50%;
+      }
+
+      /* 3 */
+      #out3put {
+        position: absolute;
+        left: 70%;
+        top: 75%;
+      }
+
+      /* 9 */
+      #out9put {
+        position: absolute;
+        left: 35%;
+        top: 15%;
+      }
+
+      /* 1 */
+      #out1put {
+        position: absolute;
+        left: 30%;
+        top: 75%;
+      }
+
+      /* 2 */
+      #out2put {
+        position: absolute;
+        left: 25%;
+        top: 50%; 
+      }
+
+      /* 4 */
+      #out4put {
+        position: absolute;
+        left: 30%;
+        top: 25%;
+      }
+
+      /* 5 */
+      #out5put {
+        position: absolute;
+        left: 35%;
+        top: 85%;
+      }
+
+      /* 7 */
+      #out7put {
+        position: absolute;
+        left: 65%;
+        top: 15%;
+      }
+
+      /* 8 */
+      #out8put {
+        position: absolute;
+        left: 65%;
+        top: 87%;  
+      }
+
+      .output {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+        float: left;
+        padding: 2px;
+          border-radius: 100%;
+        -webkit-transition: width 0.5s, height 0.5s;
+        transition: width 0.5s, height 0.5s;        
+      }
+
+      .images {
+        border-style: solid;
+        border-width: 3px;
+      }
+
+      .output:hover {
+        opacity: 1;
+        -webkit-transition: opacity 0.2s ease-in-out;
+        -moz-transition: opacity 0.2s ease-in-out;
+        -o-transition: opacity 0.2s ease-in-out;
+        transition: opacity 0.2s ease-in-out;
+        -webkit-transition: width 0.5s, height 0.5s;
+        transition: width 0.5s, height 0.5s;      
+        width: 100px;
+        height: 100px;
+        border-radius: 100%;
+      }
+
+      #searchInput {
+        position: absolute;
+        right: 0%;
+        bottom: 0.5%;
+      }
+
+      #searchButton {
+        position: relative;
+        padding: 6px 15px;
+        left: -8px;
+        border: 2px solid #207cca;
+        background-color: #207cca;
+        color: #fafafa;
+      }
+
+      #searchButton:hover  {
+        background-color: #fafafa;
+        color: #207cca;
+      }
+
+      #searchTerm {
+        padding:7px 15px;
+        background: white;
+      }
+      
+    </style>
+  </head>
+  <body>
+      <form action="#" id="searchInput">
+        <input id="searchTerm" type="text">
+        <button type="submit" id="searchButton" onclick ="start_search()">Search For Images!</button>
+      </form>
+          <div id="out0put" class="output">
+      </div>
+          <div id="out1put" class="output">
+      </div>
+          <div id="out2put" class="output">
+      </div>
+          <div id="out3put" class="output">
+      </div>
+          <div id="out4put" class="output">
+      </div>
+          <div id="out5put" class="output">
+      </div>
+          <div id="out6put" class="output">
+      </div>
+          <div id="out7put" class="output">
+      </div>
+          <div id="out8put" class="output">
+      </div>
+          <div id="out9put" class="output">
+      </div>
+
+      <script type="text/javascript">
+        var troveKey = "fuchmk4osb9mud83";
+        var counter = 0;
+        var listOfImages = { 
+                    "nla": {
+                      "numImages":0,
+                      "url_pattern":"nla.gov.au",
+                      "images":[]
+                    },
+                    "artsearch": {
+                      "numImages":0,  
+                      "url_pattern":"artsearch.nga.gov.au",
+                      "images":[]
+                    },
+                    "recordsearch": {
+                      "numImages":0,
+                      "url_pattern":"recordsearch.naa.gov.au",
+                      "images":[]
+                    },
+                    "totalimages":0,
+                    };
+        var url_patterns = ["nla.gov.au", "images.sla.gov.au", "artsearch.nga.gov.au", "recordsearch.naa.gov.au"];
+
+        $(document).ready(function(){
+          $("form#searchInput").submit();
+          $("form#searchInput").submit(function() {
+            clearImages();
+            var searchArg = $("#searchTerm").val().trim();
+            searchArg = searchArg.replace(/ /g,"%20");
+            var url = "http://api.trove.nla.gov.au/result?key=" 
+            + troveKey + "&l-availability=y%2Ff&encoding=json&zone=picture" 
+            + "&sortby=relevance&n=100&q=" + searchArg + "&callback=?";
+            for (i = 0; i < 12; i++) {
+                $('#out'+i+'put').empty();
+                $('#out'+i+'put').fadeOut(10);
+            }
+            $.getJSON(url, function(data) {
+              $('#out0put').fadeIn(5000);
+              $('#out1put').delay(1000).fadeIn(5000);
+              $('#out2put').delay(2000).fadeIn(5000);
+              $('#out3put').delay(3000).fadeIn(5000);
+              $('#out4put').delay(4000).fadeIn(5000);
+              $('#out5put').delay(5000).fadeIn(5000);
+              $('#out6put').delay(6000).fadeIn(5000);
+              $('#out7put').delay(7000).fadeIn(5000);
+              $('#out8put').delay(8000).fadeIn(5000);
+              $('#out9put').delay(9000).fadeIn(5000);
+              $('#out10put').delay(10000).fadeIn(5000);
+              $('#out11put').delay(11000).fadeIn(5000);
+
+              $.each(data.response.zone[0].records.work, retrieveImages);
+              populateDivs();
+            });
+          });
+        }); 
+
+        function retrieveImages(index, troveItem){
+          for(var i in listOfImages){
+            if(troveItem.identifier[0].value.indexOf(listOfImages[i].url_pattern) >= 0){
+              listOfImages[i].numImages++;
+              listOfImages.totalimages++;
+              listOfImages[i]["images"].push(troveItem.identifier[0].value);
+            }
+          }
+        }
+        
+        function populateDivs(){
+          for(var i in listOfImages){
+            if(listOfImages[i]["url_pattern"]=="nla.gov.au" && listOfImages[i]["numImages"]>0){
+              for (var i in listOfImages["nla"]["images"]){
+                $("#out"+counter+"put").append("<img src='"+listOfImages["nla"]["images"][i]+"-v' id=A"+counter+" class=images>");
+                counter++;
+              }
+            }
+            if(listOfImages[i]["url_pattern"]=="artsearch.nga.gov.au" && listOfImages[i]["numImages"]>0){
+              var as_url = "http://artsearch.nga.gov.au/IMAGES/LRG/";
+              for(var i in listOfImages["artsearch"]["images"]){
+                var id = getQueryVariable("IRN", listOfImages["artsearch"]["images"][i]);
+                $("#out"+counter+"put").append("<img src='"+as_url+id+".jpg' id=B"+counter+" class=images>");
+                counter++;
+              } 
+            }
+            if(listOfImages[i]["url_pattern"]=="recordsearch.naa.gov.au" && listOfImages[i]["numImages"]>0){
+              var rs_url = "http://recordsearch.naa.gov.au/NAAMedia/ShowImage.asp?T=P&S=1&B=";
+              for(var i in listOfImages["recordsearch"]["images"]){
+                var id = getQueryVariable("B", listOfImages["recordsearch"]["images"][i]);
+                $("#out"+counter+"put").append("<img src='"+rs_url+id+".jpg' id=C"+counter+" class=images>>");
+                counter++
+              } 
+            }
+          }
+        }
+        
+        function clearImages(){
+          listOfImages.totalimages = 0;
+          counter = 0;
+          for (var i in listOfImages){
+            listOfImages[i].numImages = 0;
+            listOfImages[i]["images"] = [];
+          }
+        }
+        
+        // from http://css-tricks.com/snippets/javascript/get-url-variables/
+        function getQueryVariable(variable, url)
+        {
+             var query = url.split("?");
+             var vars = query[1].split("&");
+             for (var i=0;i<vars.length;i++) {
+                     var pair = vars[i].split("=");
+                     if(pair[0] == variable){return pair[1];}
+             }
+             return(false);
+        }
+      </script>
+<script src="http://dhistory.org/static/js/jquery.js"></script>
+<script src="http://dhistory.org/static/js/bootstrap.min.js"></script>
+<script src="http://dhistory.org/static/js/jquery.jsonp-2.4.0.min.js"></script>
+<script type="text/javascript" src="d3.min.js"></script>
+
+
+
+<script type="text/javascript">
+
+//=================================BeginningD3====================================//   
+    
+var width = screen.width - 200,
+    height = screen.height - 150,
+    Pi = 2 * Math.PI,
+    Tran = 0.8,
+    Alternator = 0,
+    r = 250; //Ring Width   
+
+var myScale = d3.scale.linear().domain([0, 100]).range([0, 2 * Math.PI]);        
+console.log(screen.width);
+console.log(screen.height);
+//=================================Search Filtering Stuff========================//
+//==================DYNAMIC SEARCH CODE========================================//
+
+  var abstract = 0;
+  var bookChapter = 0;
+  var conferencePaper = 0;
+  var journalOrMagazine = 0;
+  var OtherArticle = 0;
+  var report = 0;
+  var review = 0;
+  var workingPaper = 0;
+  var braille = 0;
+  var illustrated = 0;
+  var largePrint = 0;
+  var aerialPhotograph = 0;
+  var atlas = 0;
+  var electronic = 0;
+  var globeObject = 0;
+  var largePrint = 0;
+  var mapSeries = 0;
+  var microform = 0;
+  var singleMap = 0;
+  var journalMagazineOther = 0;
+  var newspaper = 0;
+  var interview = 0;
+  var otherSound = 0;
+  var recordedMusic = 0;
+  var captions = 0;
+  var searchTerm = "tree";
+  
+  console.log("SEARCHING FOR THE TERM " + searchTerm);
+    var facets = ['Abstract','Book chapter','Conference paper','Journal or magazine article','Other article','Report','Review','Working paper','Braille','Illustrated','Large print','Aerial photograph','Atlas','Electronic','Globe or object','Large print','Map series','Microform','Single map','Journal, magazine, other','Newspaper','Interview, lecture, talk','Other sound','Recorded music','Captioned'];
+
+    var api_key = "fuchmk4osb9mud83";
+
+function prepare_results(zone, facet, start, results) {
+        if (typeof start === 'undefined') {
+            var total = results.response.zone[0].records.total;
+            start = Math.floor(Math.random() * total);
+            get_results(zone, facet, start);
+      } else {
+        var web_url = "http://trove.nla.gov.au/" + zone + "/result?q&l-format=" + facet;
+        show_resources(results, web_url);
+      }
+    }
+
+    function get_data() {
+      searchTerm = $("#searchTerm").val();
+      console.log("Searching for" + searchTerm);
+      $.jsonp({
+        "callbackParameter": 'callback',
+        "url": "http://api.trove.nla.gov.au/result?q=" + searchTerm + "&zone=book,article,collection,picture,map,music&facet=format&n=0&encoding=json&key=" + api_key,
+        "timeout": 20000,
+        "success": function(results) {
+            process_results(results);
+        }
+      });
+    }
+
+function process_results(results) {
+      var data = {'name': 'Trove', 'children': []};
+      $.each(results.response.zone, function(index, zone) {
+        var this_zone = {'name': zone.name, 'children': []};
+        $.each(zone.facets.facet.term, function(index, term) {
+          this_child = process_term(term);
+          this_zone.children.push(this_child.term);
+        });
+        data.children.push(this_zone);
+      });
+    }
+
+function process_term(term) {
+      var term_count = parseInt(term.count, 10);
+      var this_term = {'name': term.display};
+      var count = 0;
+      if (typeof term.term !== 'undefined') {
+        this_term.children = [];
+        $.each(term.term, function(index, child) {
+          var this_child = process_term(child);
+          this_term.children.push(this_child.term);
+          this_child.term.size = Math.pow(this_child.term.size, 1/3);
+          if (this_child.term.name == 'Abstract') {
+            abstract = this_child.term.size;
+            console.log("Abstract = " + abstract);
+          }
+          if (this_child.term.name == 'Book chapter') {
+            bookChapter = this_child.term.size;
+            console.log("Book chapter = " + bookChapter);
+          }
+          if (this_child.term.name == 'Conference paper') {
+            conferencePaper = this_child.term.size;
+            console.log("Conference paper = " + conferencePaper);
+          }
+          if (this_child.term.name == 'Other article') {
+            OtherArticle = this_child.term.size;
+            console.log("OtherArticle = " + OtherArticle);
+          }
+          if (this_child.term.name == 'Report') {
+            report = this_child.term.size;
+            console.log("Report = " + report);
+          }
+          if (this_child.term.name == 'Review') {
+            review = this_child.term.size;
+            console.log("Review = " + review);
+          }
+          if (this_child.term.name == 'Working paper') {
+            workingPaper = this_child.term.size;
+            console.log("WorkingPaper = " + workingPaper);
+          }
+          if (this_child.term.name == 'Braille') {
+            braille = this_child.term.size;
+            console.log("Braille = " + braille);
+          }
+          if (this_child.term.name == 'Large print') {
+            largePrint = this_child.term.size;
+            console.log("LargePrint = " + largePrint);
+          }
+          if (this_child.term.name == 'Aerial photograph') {
+            aerialPhotograph = this_child.term.size;
+            console.log("AerialPhotograph = " + aerialPhotograph);
+          }
+          if (this_child.term.name == 'Atlas') {
+            atlas = this_child.term.size;
+            console.log("Atlas = " + atlas);
+          }
+          if (this_child.term.name == 'Electronic') {
+            electronic = this_child.term.size;
+            console.log("Electronic = " + electronic);
+          }
+          if (this_child.term.name == 'Globe or object') {
+            globeObject = this_child.term.size;
+            console.log("GlobeObject = " + globeObject);
+          }
+          if (this_child.term.name == 'Large print') {
+            largePrint = this_child.term.size;
+            console.log("LargePrint = " + largePrint);
+          }
+          if (this_child.term.name == 'Map series') {
+            mapSeries = this_child.term.size;
+            console.log("MapSeries = " + mapSeries);
+          }
+          if (this_child.term.name == 'Microform') {
+            microform = this_child.term.size;
+            console.log("Microform = " + microform);
+          }
+          if (this_child.term.name == 'Single map') {
+            singleMap = this_child.term.size;
+            console.log("SingleMap = " + singleMap);
+          }
+          if (this_child.term.name == 'Journal, magazine, other') {
+            journalOrMagazine = this_child.term.size;
+            console.log("JournalOrMagazine = " + journalOrMagazine);
+          }
+          if (this_child.term.name == 'Newspaper') {
+            newspaper = this_child.term.size;
+            console.log("Newspaper = " + newspaper);
+          }
+          if (this_child.term.name == 'Interview, lecture, talk') {
+            interview = this_child.term.size;
+            console.log("Interview = " + interview);
+          }
+          if (this_child.term.name == 'Other sound') {
+            otherSound = this_child.term.size;
+            console.log("OtherSound = " + otherSound);
+          }
+          if (this_child.term.name == 'Recorded music') {
+            recordedMusic = this_child.term.size;
+            console.log("RecordedMusic = " + recordedMusic);
+          }
+          if (this_child.term.name == 'Captioned') {
+            captions = this_child.term.size;
+            console.log("Captions = " + captions);
+          }
+        });
+
+        if (term_count > count) {
+          other_count = term_count - count;
+          this_term.children.push({'name': 'Other', 'size': other_count});
+        }
+      } else {
+        this_term.size = term_count;
+      }
+      return {'term': this_term, 'count': count};
+}
+    
+</script>
+<script>
+
+//=================================False Data====================================//
+//Dynamic Journal    
+/*For the sake of code compilation and sanity, some abitrary variable messing
+    around was done*/
+    
+var FJTotal = 0.01 + (abstract+bookChapter+conferencePaper+journalOrMagazine+report+review+workingPaper+newspaper+microform),
+    FAbstract = abstract,
+    FBookChapter = bookChapter,
+    FConferencePaper = conferencePaper,
+    FJournalORmagazine = journalOrMagazine,
+    FReport = report,
+    FReview = review,
+    FWorkingPaper = workingPaper,
+    FNewspaper = newspaper,
+    FMicroform = microform;
+
+setInterval(function() {
+FJTotal = 0.01 +(abstract+bookChapter+conferencePaper+journalOrMagazine+report+review+workingPaper+newspaper+microform),FAbstract = abstract,FBookChapter = bookChapter,FConferencePaper = conferencePaper,FJournalORmagazine = journalOrMagazine,FReport = report,FReview = review,FWorkingPaper = workingPaper,FNewspaper = newspaper,FMicroform = microform;
+},500);
+    
+//Dyanmic Book  
+var FBTotal = 0.01 + (braille + illustrated + largePrint + microform),
+    FBraille = braille,
+    FIllustrated = illustrated,
+    FLargePrint = largePrint,
+    FBMicroform = microform;
+    
+setInterval(function() {
+FBTotal = 0.01 + (braille + illustrated + largePrint + microform),FBraille = braille,FIllustrated = illustrated,FLargePrint = largePrint,FBMicroform = microform;
+},500);
+    
+//Dyanmic Music
+var FMuTotal = 0.01 + (interview + otherSound + recordedMusic + captions),
+    FInterview = interview,
+    FMSound = otherSound,
+    FRecorded = recordedMusic,
+    FCaption = captions;
+    
+setInterval(function() {
+FMuTotal = 0.01 + (interview + otherSound + recordedMusic + captions),FInterview = interview,FMSound = otherSound,FRecorded = recordedMusic,FCaption = captions;  
+},500);
+    
+//Dynamic Map
+var FMapTotal = 0.01 + (aerialPhotograph+atlas+electronic+globeObject+mapSeries+singleMap),
+    FAerial = aerialPhotograph,
+    FAtlas = atlas,
+    FElectronic = electronic,
+    FGlobe = globeObject,
+    FMap = mapSeries,
+    FSingleMap = singleMap;
+    
+setInterval(function() {
+FMapTotal = 0.01 + (aerialPhotograph+atlas+electronic+globeObject+mapSeries+singleMap),FAerial = aerialPhotograph,FAtlas = atlas,FElectronic = electronic,FGlobe = globeObject,FMap = mapSeries,FSingleMap = singleMap;
+},500);
+    
+//Dynamic Picture
+var FPicTotal = 0.01 + microform,
+    FPMicroform = microform;
+    
+setInterval(function() {
+FPicTotal = 0.01 + microform,FPMicroform = microform;
+},500);
+    
+var ACTotal = FJTotal + FBTotal + FMuTotal + FMapTotal + FPicTotal,
+    Ri0 = (FJTotal/ACTotal) * r,
+    Ri1 = (FBTotal/ACTotal) * r,
+    Ri2 = (FMuTotal/ACTotal) * r,
+    Ri3 = (FMapTotal/ACTotal) * r,
+    Ri4 = (FPicTotal/ACTotal) * r;
+    
+setInterval(function() {
+ACTotal = FJTotal + FBTotal + FMuTotal + FMapTotal + FPicTotal,Ri0 = (FJTotal/ACTotal) * r,Ri1 = (FBTotal/ACTotal) * r,Ri2 = (FMuTotal/ACTotal) * r,Ri3 = (FMapTotal/ACTotal) * r,Ri4 = (FPicTotal/ACTotal) * r;
+},500);    
+    
+//=================================Arc Data====================================//
+
+//Data for Journal
+var JTotal = (FJTotal), //Obtain Total Journals From Trove
+    Abstract = (FAbstract/JTotal) * 100,
+    BookChapter = (FBookChapter/JTotal) * 100,
+    ConferencePaper = (FConferencePaper/JTotal) * 100,
+    JournalORmagazine = (FJournalORmagazine/JTotal) * 100,
+    Report = (FReport/JTotal) * 100,
+    Review = (FReview/JTotal) * 100,
+    WorkingPaper = (FWorkingPaper/JTotal) * 100,
+    Newspaper = (FNewspaper/JTotal) * 100,
+    Microform = (FMicroform/JTotal) * 100;
+
+setInterval(function(){
+JTotal = (FJTotal),Abstract = (FAbstract/JTotal) * 100,BookChapter = (FBookChapter/JTotal) * 100,ConferencePaper = (FConferencePaper/JTotal) * 100,JournalORmagazine = (FJournalORmagazine/JTotal) * 100,Report = (FReport/JTotal) * 100,Review = (FReview/JTotal) * 100,WorkingPaper = (FWorkingPaper/JTotal) * 100,Newspaper = (FNewspaper/JTotal) * 100,Microform = (FMicroform/JTotal) * 100;
+},400);
+    
+//Data for Books
+var BTotal = (FBTotal),
+    Braille = (FBraille/BTotal) * 100,
+    Illustrated = (FIllustrated/BTotal) * 100,
+    LargePrint = (FLargePrint/BTotal) * 100,
+    BMicroform = (FBMicroform/BTotal) * 100;
+    
+setInterval(function(){
+BTotal = (FBTotal),Braille = (FBraille/BTotal) * 100,Illustrated = (FIllustrated/BTotal) * 100,LargePrint = (FLargePrint/BTotal) * 100,BMicroform = (FBMicroform/BTotal) * 100;
+},400);
+
+//Data for Music
+var MuTotal = (FMuTotal),
+    Interview = (FInterview/MuTotal) * 100,
+    MSound = (FMSound/MuTotal) * 100,
+    Recorded = (FRecorded/MuTotal) * 100,
+    Caption = (FCaption/MuTotal) * 100;
+    
+setInterval(function(){
+MuTotal = (FMuTotal),Interview = (FInterview/MuTotal) * 100,MSound = (FMSound/MuTotal) * 100,Recorded = (FRecorded/MuTotal) * 100,Caption = (FCaption/MuTotal) * 100;
+},400);
+
+//Data for Maps
+var MapTotal = (FMapTotal),
+    Aerial = (FAerial/MapTotal) * 100,
+    Atlas = (FAtlas/MapTotal) * 100,
+    Electronic = (FElectronic/MapTotal) * 100,
+    Globe = (FGlobe/MapTotal) * 100,
+    Map = (FMap/MapTotal) * 100,
+    SingleMap = (FSingleMap/MapTotal) * 100;
+    
+setInterval(function(){
+MapTotal = (FMapTotal),Aerial = (FAerial/MapTotal) * 100,Atlas = (FAtlas/MapTotal) * 100,Electronic = (FElectronic/MapTotal) * 100,Globe = (FGlobe/MapTotal) * 100,Map = (FMap/MapTotal) * 100,SingleMap = (FSingleMap/MapTotal) * 100;
+},400);
+    
+//Data for Pictures
+var PicTotal = (FPicTotal),
+    PMicroform = (FPMicroform/PicTotal) * 100;
+    
+setInterval(function(){
+PicTotal = (FPicTotal),PMicroform = (FPMicroform/PicTotal) * 100;
+},400);
+    
+//=================================Ease of Use====================================//
+    
+//Data for journal
+var PJ0 = (Abstract),
+    PJ1 = (PJ0+BookChapter),
+    PJ2 = (PJ1+ConferencePaper),
+    PJ3 = (PJ2+JournalORmagazine),
+    PJ4 = (PJ3+Report),
+    PJ5 = (PJ4+Review),
+    PJ6 = (PJ5+WorkingPaper),
+    PJ7 = (PJ6+Newspaper),
+    PJ8 = (PJ7+Microform);
+    
+setInterval(function() {
+PJ0 = (Abstract),PJ1 = (PJ0+BookChapter),PJ2 = (PJ1+ConferencePaper),PJ3 = (PJ2+JournalORmagazine),PJ4 = (PJ3+Report),PJ5 = (PJ4+Review),PJ6 = (PJ5+WorkingPaper),PJ7 = (PJ6+Newspaper),PJ8 = (PJ7+Microform);;
+},500);
+    
+var J0 = myScale(PJ0),
+    J1 = myScale(PJ1),
+    J2 = myScale(PJ2),
+    J3 = myScale(PJ3),
+    J4 = myScale(PJ4),
+    J5 = myScale(PJ5),
+    J6 = myScale(PJ6),
+    J7 = myScale(PJ7),
+    J8 = myScale(PJ8);
+    
+setInterval(function() {
+J0 = myScale(PJ0),J1 = myScale(PJ1),J2 = myScale(PJ2),J3 = myScale(PJ3),J4 = myScale(PJ4),J5 = myScale(PJ5),J6 = myScale(PJ6),J7 = myScale(PJ7),J8 = myScale(PJ8);
+},500);
+    
+//Data for book
+var PB0 = (Braille),
+    PB1 = (PB0+Illustrated),
+    PB2 = (PB1+LargePrint),
+    PB3 = (PB2+BMicroform);
+    
+setInterval(function() {
+PB0 = (Braille),PB1 = (PB0+Illustrated),PB2 = (PB1+LargePrint),PB3 = (PB2+BMicroform);
+},500);
+    
+var B0 = myScale(PB0),
+    B1 = myScale(PB1),
+    B2 = myScale(PB2),
+    B3 = myScale(PB3);
+    
+setInterval(function() {
+B0 = myScale(PB0),B1 = myScale(PB1),B2 = myScale(PB2),B3 = myScale(PB3);
+},500);
+    
+//Data for music
+var PM0 = (Interview),
+    PM1 = (PM0+MSound),
+    PM2 = (PM1+Recorded),
+    PM3 = (PM2+Caption);
+    
+setInterval(function() {
+PM0 = (Interview),PM1 = (PM0+MSound),PM2 = (PM1+Recorded),PM3 = (PM2+Caption);
+},500);
+    
+var M0 = myScale(PM0),
+    M1 = myScale(PM1),
+    M2 = myScale(PM2),
+    M3 = myScale(PM3);
+    
+setInterval(function() {
+M0 = myScale(PM0),M1 = myScale(PM1),M2 = myScale(PM2),M3 = myScale(PM3);
+},500);
+    
+//Data for map
+var PMa0 = (Aerial),
+    PMa1 = (PMa0+Atlas),
+    PMa2 = (PMa1+Electronic),
+    PMa3 = (PMa2+Globe),
+    PMa4 = (PMa3+Map),
+    PMa5 = (PMa4+SingleMap);  
+    
+setInterval(function() {
+PMa0 = (Aerial),PMa1 = (PMa0+Atlas),PMa2 = (PMa1+Electronic),PMa3 = (PMa2+Globe),PMa4 = (PMa3+Map),PMa5 = (PMa4+SingleMap);  
+},500);
+    
+var Ma0 = myScale(PMa0),
+    Ma1 = myScale(PMa1),
+    Ma2 = myScale(PMa2),
+    Ma3 = myScale(PMa3),
+    Ma4 = myScale(PMa4),
+    Ma5 = myScale(PMa5);
+    
+setInterval(function() {
+Ma0 = myScale(PMa0),Ma1 = myScale(PMa1),Ma2 = myScale(PMa2),Ma3 = myScale(PMa3),Ma4 = myScale(PMa4),Ma5 = myScale(PMa5);
+},500);
+    
+//Data for picture
+var PP0 = (PMicroform);
+    
+setInterval(function() {
+PP0 = (PMicroform);
+},500);
+    
+var P0 = myScale(PP0);
+    
+setInterval(function() {
+P0 = myScale(PP0);
+},500);
+    
+//=================================Generic Comp====================================// 
+
+var color = d3.scale.category20();  
+var arc = d3.svg.arc();
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+
+/* HANDLE CIRCLE POSITIONING WITH THIS LINE*/
+    .attr("transform", "translate(" + width / 1.65 + "," + height / 1.687 + ")"); 
+
+//=================================Arc Ring1(Journal)====================================//
+  
+var R1in = r-Ri0;
+    R1out = r
+    
+setInterval(function() {
+R1in = r-Ri0;R1out = r
+},500);
+    
+var Ring100 = svg.append("path")
+    .datum({startAngle: myScale(0), endAngle: J0, innerRadius: R1in, outerRadius: R1out})
+    .style("fill", '#937536')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring101 = svg.append("path")
+    .datum({startAngle: J0, endAngle: J1, innerRadius: R1in, outerRadius: R1out})
+    .style("fill", '#584620')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring102 = svg.append("path")
+    .datum({startAngle: J1, endAngle: J2, innerRadius: R1in, outerRadius: R1out})
+    .style("fill", '#675226')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring103 = svg.append("path")
+    .datum({startAngle: J2, endAngle: J3, innerRadius: R1in, outerRadius: R1out})
+    .style("fill", '#765E2B ')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring104 = svg.append("path")
+    .datum({startAngle: J3, endAngle: J4, innerRadius: R1in, outerRadius: R1out})
+    .style("fill", '#846931')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring105 = svg.append("path")
+    .datum({startAngle: J4, endAngle: J5, innerRadius: R1in, outerRadius: R1out})
+    .style("fill", '#937536')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring106 = svg.append("path")
+    .datum({startAngle: J5, endAngle: J6, innerRadius: R1in, outerRadius: R1out})
+    .style("fill", '#9E834A')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring107 = svg.append("path")
+    .datum({startAngle: J6, endAngle: J7, innerRadius: R1in, outerRadius: R1out})
+    .style("fill", '#A9915E')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring108 = svg.append("path")
+    .datum({startAngle: J7, endAngle: J8, innerRadius: R1in, outerRadius: R1out})
+    .style("fill", '#B39E72')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring109 = svg.append("path")
+    .datum({startAngle: J8, endAngle: myScale(100), innerRadius: R1in, outerRadius: R1out})
+    .style("fill", '#BEAC86')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+    
+Ring100.on('click', function() {Ring1Skip();});
+Ring101.on('click', function() {Ring1Skip();});
+Ring102.on('click', function() {Ring1Skip();});
+Ring103.on('click', function() {Ring1Skip();});
+Ring104.on('click', function() {Ring1Skip();});
+Ring105.on('click', function() {Ring1Skip();});
+Ring106.on('click', function() {Ring1Skip();});
+Ring107.on('click', function() {Ring1Skip();});
+Ring108.on('click', function() {Ring1Skip();});
+Ring109.on('click', function() {Ring1Skip();});
+    
+function Ring1Skip() {
+    if (Alternator == 0) {
+        QRing1();
+        TRing2T();
+        TRing3T();
+        TRing4T();
+        TRing5T();
+        Alternator = 1
+    }
+    else {
+        TRing1TB(250);
+        TRing2TB(250);
+        TRing3TB(250);
+        TRing4TB(250);
+        TRing5TB(250);
+        Alternator = 0;
+    }
+};
+
+//=================================Arc Ring2(Books)====================================//
+
+var R2in = R1in - Ri1,
+    R2out = R1in;
+    
+setInterval(function() {
+R2in = R1in - Ri1,R2out = R1in;
+},500);
+    
+var Ring200 = svg.append("path")
+    .datum({startAngle: myScale(0), endAngle: B0, innerRadius: R2in, outerRadius: R2out})
+    .style("fill", '#CCCC99')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring201 = svg.append("path")
+    .datum({startAngle: B0, endAngle: B1, innerRadius: R2in, outerRadius: R2out})
+    .style("fill", '#D1D1A3')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring202 = svg.append("path")
+    .datum({startAngle: B1, endAngle: B2, innerRadius: R2in, outerRadius: R2out})
+    .style("fill", '#D6D6AD')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring203 = svg.append("path")
+    .datum({startAngle: B2, endAngle: B3, innerRadius: R2in, outerRadius: R2out})
+    .style("fill", '#DBDBB8')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring204 = svg.append("path")
+    .datum({startAngle: B3, endAngle: myScale(100), innerRadius: R2in, outerRadius: R2out})
+    .style("fill", '#E0E0C2')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+    
+Ring200.on('click', function() {Ring2Skip();});
+Ring201.on('click', function() {Ring2Skip();});
+Ring202.on('click', function() {Ring2Skip();});
+Ring203.on('click', function() {Ring2Skip();});
+Ring204.on('click', function() {Ring2Skip();});
+    
+function Ring2Skip() {
+    if (Alternator == 0) {
+        QRing2();
+        TRing3T();
+        TRing4T();
+        TRing5T();
+        Alternator = 1
+    }
+    else {
+        TRing2TB(250);
+        TRing3TB(250);
+        TRing4TB(250);
+        TRing5TB(250);
+        Alternator = 0;
+    }
+};
+
+
+//=================================Arc Ring3(Music)====================================//
+    
+var R3in = R2in - Ri2,
+    R3out = R2in;
+    
+setInterval(function() {
+R3in = R2in - Ri2,R3out = R2in;
+},500);
+    
+var Ring300 = svg.append("path")
+    .datum({startAngle: myScale(0), endAngle: M0, innerRadius: R3in, outerRadius: R3out})
+    .style("fill", '#6A6E2B')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring301 = svg.append("path")
+    .datum({startAngle: M0, endAngle: M1, innerRadius: R3in, outerRadius: R3out})
+    .style("fill", '#797E31')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring302 = svg.append("path")
+    .datum({startAngle: M1, endAngle: M2, innerRadius: R3in, outerRadius: R3out})
+    .style("fill", '#888D37')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring303 = svg.append("path")
+    .datum({startAngle: M2, endAngle: M3, innerRadius: R3in, outerRadius: R3out})
+    .style("fill", '#979d3d')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring304 = svg.append("path")
+    .datum({startAngle: M3, endAngle: myScale(100), innerRadius: R3in, outerRadius: R3out})
+    .style("fill", '#B6BA77')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+    
+Ring300.on('click', function() {Ring3Skip();});
+Ring301.on('click', function() {Ring3Skip();});
+Ring302.on('click', function() {Ring3Skip();});
+Ring303.on('click', function() {Ring3Skip();});
+Ring304.on('click', function() {Ring3Skip();});
+    
+function Ring3Skip() {
+    if (Alternator == 0) {
+        QRing3();
+        TRing4T();
+        TRing5T();
+        Alternator = 1
+    }
+    else {
+        TRing3TB(250);
+        TRing4TB(250);
+        TRing5TB(250);
+        Alternator = 0;
+    }
+};
+    
+//=================================Arc Ring4(map)====================================//
+ 
+var R4in = R3in - Ri3,
+    R4out = R3in;  
+    
+setInterval(function() {
+R4in = R3in - Ri3,R4out = R3in;
+},500);
+    
+var Ring400 = svg.append("path")
+    .datum({startAngle: myScale(0), endAngle: Ma0, innerRadius: R4in, outerRadius: R4out})
+    .style("fill", '#e98d3f')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring401 = svg.append("path")
+    .datum({startAngle: Ma0, endAngle: Ma1, innerRadius: R4in, outerRadius: R4out})
+    .style("fill", '#EB9852')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring402 = svg.append("path")
+    .datum({startAngle: Ma1, endAngle: Ma2, innerRadius: R4in, outerRadius: R4out})
+    .style("fill", '#EDA465')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring403 = svg.append("path")
+    .datum({startAngle: Ma2, endAngle: Ma3, innerRadius: R4in, outerRadius: R4out})
+    .style("fill", '#F0AF79')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring404 = svg.append("path")
+    .datum({startAngle: Ma3, endAngle: Ma4, innerRadius: R4in, outerRadius: R4out})
+    .style("fill", '#F2BB8C')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring405 = svg.append("path")
+    .datum({startAngle: Ma4, endAngle: Ma5, innerRadius: R4in, outerRadius: R4out})
+    .style("fill", '#F4C69F')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring406 = svg.append("path")
+    .datum({startAngle: Ma5, endAngle: myScale(100), innerRadius: R4in, outerRadius: R4out})
+    .style("fill", '#F6D1B2')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+  
+Ring400.on('click', function() {Ring4Skip();});
+Ring401.on('click', function() {Ring4Skip();});
+Ring402.on('click', function() {Ring4Skip();});
+Ring403.on('click', function() {Ring4Skip();});
+Ring404.on('click', function() {Ring4Skip();});
+Ring405.on('click', function() {Ring4Skip();});
+Ring406.on('click', function() {Ring4Skip();});
+
+    
+function Ring4Skip() {
+    if (Alternator == 0) {
+        QRing4();
+        TRing5T();
+        Alternator = 1
+    }
+    else {
+        TRing4TB(250);
+        TRing5TB(250);
+        Alternator = 0;
+    }
+};
+    
+//=================================Arc Ring5(Pictures)====================================//
+   
+var R5in = R4in - Ri4,
+    R5out = R4in;
+    
+setInterval(function() {
+R5in = R4in - Ri4,R5out = R4in;
+},500);
+    
+var Ring500 = svg.append("path")
+    .datum({startAngle: myScale(0), endAngle: P0, innerRadius: R5in, outerRadius: R5out})
+    .style("fill", '#e3c44f')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+var Ring501 = svg.append("path")
+    .datum({startAngle: P0, endAngle: myScale(100), innerRadius: R5in, outerRadius: R5out})
+    .style("fill", '#F1E2A7')
+    .attr('fill-opacity', Tran)
+    .attr("stroke", "white")
+    .attr("stroke-width", 2)
+    .attr("d", arc);
+    
+Ring500.on('click', function() {Ring5Skip();});
+Ring501.on('click', function() {Ring5Skip();});
+ 
+function Ring5Skip() {
+    if (Alternator == 0) {
+        QRing5();
+        Alternator = 1
+    }
+    else {
+        TRing5TB(250);
+        Alternator = 0;
+    }
+};
+    
+
+    
+//=================================Funtions====================================//    
+
+//Collision Physics 
+function spawn_leaves() {
+        //var snd = new Audio("leaves.wav"); // buffers automatically when created
+        //snd.play();
+        var nodes = d3.range(10).map(function () {
+            return {radius: 70};
+        }), //node frequency, and average size
+                root = nodes[0],
+                color = d3.scale.category10();
+
+        root.radius = 0;
+        root.fixed = true;
+
+        var force = d3.layout.force()
+                .gravity(0.05)
+                .charge(function (d, i) {
+                    return i ? 0 : -7000;
+                }) //The force with which nodes are repelled
+                .nodes(nodes)
+                .size([-100, -1]);
+
+        force.start();
+
+        root.px = 0;
+        root.py = 0;
+        force.resume();
+
+        svg.selectAll("image")
+                .data(nodes.slice(1))
+                .enter().append("image")
+                .attr("r", function (d) {
+                    return d.radius;
+                })
+                .style("fill", function (d, i) {
+                    return color(i % 3);
+                })
+                .attr("xlink:href", "http://static.tumblr.com/d1c19e5f657b16003fd45990940b496d/keumtl8/3SDmjxc06/tumblr_static_plank_leaf_clear_png.png")
+                .attr("width", 50)
+                .attr("height", 50); //colours chosen (3)
+
+        force.on("tick", function (e) {
+            var q = d3.geom.quadtree(nodes),
+                    i = 0, //distance from centre spawn
+                    n = nodes.length;
+
+            while (++i < n)
+                q.visit(collide(nodes[i]));
+
+            svg.selectAll("image")
+                    .attr("x", function (d) {
+                        return d.x;
+                    })
+                    .attr("y", function (d) {
+                        return d.y;
+                    });
+        });
+
+        function collide(node) {
+            var r = node.radius + 16,
+                    nx1 = node.x - r,
+                    nx2 = node.x + r,
+                    ny1 = node.y - r,
+                    ny2 = node.y + r;
+            return function (quad, x1, y1, x2, y2) {
+                if (quad.point && (quad.point !== node)) {
+                    var x = node.x - quad.point.x,
+                            y = node.y - quad.point.y,
+                            l = Math.sqrt(x * x + y * y),
+                            r = node.radius + quad.point.radius;
+                    if (l < r) {
+                        l = (l - r) / l * .5;
+                        node.x -= x *= l;
+                        node.y -= y *= l;
+                        quad.point.x += x;
+                        quad.point.y += y;
+                    }
+                }
+                return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+            };
+        }
+}
+    
+//Modify Arc Zoom
+        function Zoom(transition, InRad, OutRad) {
+          transition.attrTween("d", function(d) {
+            var i = d3.interpolate(d.innerRadius, InRad);
+            var y = d3.interpolate(d.outerRadius, OutRad);
+            return function(t) {
+              d.innerRadius = i(t);
+              d.outerRadius = y(t);
+              return arc(d);
+            };
+          });
+        }
+         
+    
+//Modify Length Modifier
+        function Update(transition, StartAng, EndAng) {
+          transition.attrTween("d", function(d) {
+            var i = d3.interpolate(d.startAngle, StartAng);
+            var y = d3.interpolate(d.endAngle, EndAng);
+            return function(t) {
+              d.startAngle = i(t);
+              d.endAngle = y(t);
+              return arc(d);
+            };
+          });
+        }    
+    
+//Ease of access Code    
+function QRing1() {
+    Ring100.transition().duration(250).call(Zoom,0,r)
+    Ring101.transition().duration(250).call(Zoom,0,r)
+    Ring102.transition().duration(250).call(Zoom,0,r)
+    Ring103.transition().duration(250).call(Zoom,0,r)
+    Ring104.transition().duration(250).call(Zoom,0,r)
+    Ring105.transition().duration(250).call(Zoom,0,r)
+    Ring106.transition().duration(250).call(Zoom,0,r)
+    Ring107.transition().duration(250).call(Zoom,0,r)
+    Ring108.transition().duration(250).call(Zoom,0,r)
+    Ring109.transition().duration(250).call(Zoom,0,r)
+};
+
+function TRing1TB(Time) {
+    Ring100.transition().duration(Time).call(Zoom,R1in,R1out)
+    Ring101.transition().duration(Time).call(Zoom,R1in,R1out)
+    Ring102.transition().duration(Time).call(Zoom,R1in,R1out)
+    Ring103.transition().duration(Time).call(Zoom,R1in,R1out)
+    Ring104.transition().duration(Time).call(Zoom,R1in,R1out)
+    Ring105.transition().duration(Time).call(Zoom,R1in,R1out)
+    Ring106.transition().duration(Time).call(Zoom,R1in,R1out)
+    Ring107.transition().duration(Time).call(Zoom,R1in,R1out)
+    Ring108.transition().duration(Time).call(Zoom,R1in,R1out)
+    Ring109.transition().duration(Time).call(Zoom,R1in,R1out)
+};
+    
+function QRing2() {
+    Ring200.transition().duration(250).call(Zoom,0,r)
+    Ring201.transition().duration(250).call(Zoom,0,r)
+    Ring202.transition().duration(250).call(Zoom,0,r)
+    Ring203.transition().duration(250).call(Zoom,0,r)
+    Ring204.transition().duration(250).call(Zoom,0,r)
+};
+    
+function TRing2T() {
+    Ring200.transition().duration(250).call(Zoom,0,0)
+    Ring201.transition().duration(250).call(Zoom,0,0)
+    Ring202.transition().duration(250).call(Zoom,0,0)
+    Ring203.transition().duration(250).call(Zoom,0,0)
+    Ring204.transition().duration(250).call(Zoom,0,0)
+};
+    
+function TRing2TB(Time) {
+    Ring200.transition().duration(Time).call(Zoom,R2in,R2out)
+    Ring201.transition().duration(Time).call(Zoom,R2in,R2out)
+    Ring202.transition().duration(Time).call(Zoom,R2in,R2out)
+    Ring203.transition().duration(Time).call(Zoom,R2in,R2out)
+    Ring204.transition().duration(Time).call(Zoom,R2in,R2out)
+};
+    
+function QRing3() {
+    Ring300.transition().duration(250).call(Zoom,0,r)
+    Ring301.transition().duration(250).call(Zoom,0,r)
+    Ring302.transition().duration(250).call(Zoom,0,r)
+    Ring303.transition().duration(250).call(Zoom,0,r)
+    Ring304.transition().duration(250).call(Zoom,0,r)    
+};    
+    
+function TRing3T() {
+    Ring300.transition().duration(250).call(Zoom,0,0)
+    Ring301.transition().duration(250).call(Zoom,0,0)
+    Ring302.transition().duration(250).call(Zoom,0,0)
+    Ring303.transition().duration(250).call(Zoom,0,0)
+    Ring303.transition().duration(250).call(Zoom,0,0)
+    Ring304.transition().duration(250).call(Zoom,0,0)
+};    
+    
+function TRing3TB(Time) {
+    Ring300.transition().duration(Time).call(Zoom,R3in,R3out)
+    Ring301.transition().duration(Time).call(Zoom,R3in,R3out)
+    Ring302.transition().duration(Time).call(Zoom,R3in,R3out)
+    Ring303.transition().duration(Time).call(Zoom,R3in,R3out)
+    Ring304.transition().duration(Time).call(Zoom,R3in,R3out)
+};
+    
+function QRing4() {
+    Ring400.transition().duration(250).call(Zoom,0,r)
+    Ring401.transition().duration(250).call(Zoom,0,r)
+    Ring402.transition().duration(250).call(Zoom,0,r)
+    Ring403.transition().duration(250).call(Zoom,0,r)
+    Ring404.transition().duration(250).call(Zoom,0,r)
+    Ring405.transition().duration(250).call(Zoom,0,r)
+    Ring406.transition().duration(250).call(Zoom,0,r)
+};    
+    
+function TRing4T() {
+    Ring400.transition().duration(250).call(Zoom,0,0)
+    Ring401.transition().duration(250).call(Zoom,0,0)
+    Ring402.transition().duration(250).call(Zoom,0,0)
+    Ring403.transition().duration(250).call(Zoom,0,0)
+    Ring404.transition().duration(250).call(Zoom,0,0)
+    Ring405.transition().duration(250).call(Zoom,0,0)
+    Ring406.transition().duration(250).call(Zoom,0,0)
+};
+    
+function TRing4TB(Time) {
+    Ring400.transition().duration(Time).call(Zoom,R4in,R4out)
+    Ring401.transition().duration(Time).call(Zoom,R4in,R4out)
+    Ring402.transition().duration(Time).call(Zoom,R4in,R4out)
+    Ring403.transition().duration(Time).call(Zoom,R4in,R4out)
+    Ring404.transition().duration(Time).call(Zoom,R4in,R4out)
+    Ring405.transition().duration(Time).call(Zoom,R4in,R4out)
+    Ring406.transition().duration(Time).call(Zoom,R4in,R4out)
+};
+    
+function QRing5() {
+    Ring500.transition().duration(250).call(Zoom,0,r)
+    Ring501.transition().duration(250).call(Zoom,0,r)
+};    
+    
+function TRing5T() {
+    Ring500.transition().duration(250).call(Zoom,0,0)
+    Ring501.transition().duration(250).call(Zoom,0,0)
+};
+    
+function TRing5TB(Time) {
+    Ring500.transition().duration(Time).call(Zoom,R5in,R5out)
+    Ring501.transition().duration(Time).call(Zoom,R5in,R5out)
+};
+    
+//Search Function
+function start_search(search) {
+        console.log("SEARCHING FOR THE TERM " + searchTerm);
+        searchTerm = search;
+            var abstract=0,bookChapter=0,conferencePaper=0,journalOrMagazine=0,OtherArticle=0,report=0,review=0,workingPaper=0,braille=0,illustrated=0,largePrint=0,aerialPhotograph=0,atlas=0,electronic=0,globeObject=0,largePrint=0,mapSeries=0,microform=0,singleMap=0,journalMagazineOther=0,newspaper=0,interview=0,otherSound=0,recordedMusic=0,captions=0;
+            console.log("updating");
+            spawn_leaves();
+            get_data();
+            setTimeout(function() {
+                    TRing1TB(2000);
+                    TRing2TB(2000);
+                    TRing3TB(2000);
+                    TRing4TB(2000);
+                    TRing5TB(2000);
+            },4000);
+            setTimeout(function() {
+                    Ring100.transition().duration(D).call(Update,myScale(0),J0),
+                    Ring101.transition().duration(D).call(Update,J0,J1),
+                    Ring102.transition().duration(D).call(Update,J1,J2),
+                    Ring103.transition().duration(D).call(Update,J2,J3),
+                    Ring104.transition().duration(D).call(Update,J3,J4),
+                    Ring105.transition().duration(D).call(Update,J4,J5),
+                    Ring106.transition().duration(D).call(Update,J5,J6),
+                    Ring107.transition().duration(D).call(Update,J6,J7),
+                    Ring108.transition().duration(D).call(Update,J7,J8),
+                    Ring109.transition().duration(D).call(Update,J8,myScale(100)),
+                    Ring200.transition().duration(D).call(Update,myScale(0),B0),
+                    Ring201.transition().duration(D).call(Update,B0,B1),
+                    Ring202.transition().duration(D).call(Update,B1,B2),
+                    Ring203.transition().duration(D).call(Update,B2,B3),
+                    Ring204.transition().duration(D).call(Update,B3,myScale(100)),
+                    Ring300.transition().duration(D).call(Update,myScale(0),M0),
+                    Ring301.transition().duration(D).call(Update,M0,M1),
+                    Ring302.transition().duration(D).call(Update,M1,M2),
+                    Ring303.transition().duration(D).call(Update,M2,M3),
+                    Ring304.transition().duration(D).call(Update,M3,myScale(100)),
+                    Ring400.transition().duration(D).call(Update,myScale(0),Ma0),
+                    Ring401.transition().duration(D).call(Update,Ma0,Ma1),
+                    Ring402.transition().duration(D).call(Update,Ma1,Ma2),
+                    Ring403.transition().duration(D).call(Update,Ma2,Ma3),
+                    Ring404.transition().duration(D).call(Update,Ma3,Ma4),
+                    Ring405.transition().duration(D).call(Update,Ma4,Ma5),
+                    Ring406.transition().duration(D).call(Update,Ma5,myScale(100)),
+                    Ring500.transition().duration(D).call(Update,myScale(0),P0),
+                    Ring501.transition().duration(D).call(Update,P0,myScale(100));
+                    }, 6000);
+              };
+
+    
+//=================================MouseOver====================================//
+    
+var mouseOpt = "1",
+    Title = 'Search To Begin'
+    ArcValue = '0'
+
+var tooltip = d3.select("body")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("opacity", 0);
+
+Ring100.on("mouseover", function(d) {
+          Ring100.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Abstract: " + Math.ceil((Math.pow(abstract, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring100.on('mouseout', function() {Ring100.attr("fill-opacity", Tran)});
+
+Ring101.on("mouseover", function(d) {
+          Ring101.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Book Chapter: " + Math.ceil((Math.pow(bookChapter, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring101.on('mouseout', function() {Ring101.attr("fill-opacity", Tran)});
+
+Ring102.on("mouseover", function(d) {
+          Ring102.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Conference Paper: " + Math.ceil((Math.pow(conferencePaper, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring102.on('mouseout', function() {Ring102.attr("fill-opacity", Tran)});
+
+Ring103.on("mouseover", function(d) {
+          Ring103.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Journal or Magazine: " + Math.ceil((Math.pow(journalOrMagazine, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring103.on('mouseout', function() {Ring103.attr("fill-opacity", Tran)});
+
+Ring104.on("mouseover", function(d) {
+          Ring104.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Report: " + Math.ceil((Math.pow(report, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring104.on('mouseout', function() {Ring104.attr("fill-opacity", Tran)});
+
+Ring105.on("mouseover", function(d) {
+          Ring105.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Review: " + Math.ceil((Math.pow(review, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring105.on('mouseout', function() {Ring105.attr("fill-opacity", Tran)});
+
+Ring106.on("mouseover", function(d) {
+          Ring106.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Working Paper: " + Math.ceil((Math.pow(workingPaper, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring106.on('mouseout', function() {Ring106.attr("fill-opacity", Tran)});
+
+Ring107.on("mouseover", function(d) {
+          Ring107.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Newspaper: " + Math.ceil((Math.pow(newspaper, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring107.on('mouseout', function() {Ring107.attr("fill-opacity", Tran)});
+
+Ring108.on("mouseover", function(d) {
+          Ring108.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+            var name = "Journal Microform: " + Math.ceil((Math.pow(microform, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring108.on('mouseout', function() {Ring108.attr("fill-opacity", Tran)});
+    
+Ring200.on("mouseover", function(d) {
+          Ring200.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Braille: " + Math.ceil((Math.pow(braille, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring200.on('mouseout', function() {Ring200.attr("fill-opacity", Tran)});
+
+Ring201.on("mouseover", function(d) {
+          Ring201.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Illustrated: " + Math.ceil((Math.pow(illustrated, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring201.on('mouseout', function() {Ring201.attr("fill-opacity", Tran)});
+
+Ring202.on("mouseover", function(d) {
+          Ring202.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Large Prints: " + Math.ceil((Math.pow(largePrint, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring202.on('mouseout', function() {Ring202.attr("fill-opacity", Tran)});
+
+Ring203.on("mouseover", function(d) {
+          Ring203.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Book Microform: " + Math.ceil((Math.pow(microform, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring203.on('mouseout', function() {Ring203.attr("fill-opacity", Tran)});
+    
+Ring300.on("mouseover", function(d) {
+          Ring300.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Interview: " + Math.ceil((Math.pow(interview, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring300.on('mouseout', function() {Ring300.attr("fill-opacity", Tran)});
+
+Ring301.on("mouseover", function(d) {
+          Ring301.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Other Sounds: " + Math.ceil((Math.pow(otherSound, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring301.on('mouseout', function() {Ring301.attr("fill-opacity", Tran)});
+
+Ring302.on("mouseover", function(d) {
+          Ring302.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Recorded Music: " + Math.ceil((Math.pow(recordedMusic, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring302.on('mouseout', function() {Ring302.attr("fill-opacity", Tran)});
+
+Ring303.on("mouseover", function(d) {
+          Ring303.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Captions: " + Math.ceil((Math.pow(captions, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring303.on('mouseout', function() {Ring303.attr("fill-opacity", Tran)});
+
+Ring400.on("mouseover", function(d) {
+          Ring400.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Aerial: " + Math.ceil((Math.pow(aerialPhotograph, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring400.on('mouseout', function() {Ring400.attr("fill-opacity", Tran)});
+
+Ring401.on("mouseover", function(d) {
+          Ring401.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+             var name = "Atlas: " + Math.ceil((Math.pow(atlas, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring401.on('mouseout', function() {Ring401.attr("fill-opacity", Tran)});
+
+Ring402.on("mouseover", function(d) {
+          Ring402.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Electronic Maps: " + Math.ceil((Math.pow(electronic, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring402.on('mouseout', function() {Ring402.attr("fill-opacity", Tran)});
+
+Ring403.on("mouseover", function(d) {
+          Ring403.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Globe Objects: " + Math.ceil((Math.pow(globeObject, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring403.on('mouseout', function() {Ring403.attr("fill-opacity", Tran)});
+
+Ring404.on("mouseover", function(d) {
+          Ring404.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Map Series: " + Math.ceil((Math.pow(mapSeries, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring404.on('mouseout', function() {Ring404.attr("fill-opacity", Tran)});
+
+Ring405.on("mouseover", function(d) {
+          Ring405.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Single Maps: " + Math.ceil((Math.pow(singleMap, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring405.on('mouseout', function() {Ring405.attr("fill-opacity", Tran)});
+    
+Ring500.on("mouseover", function(d) {
+          Ring500.attr("fill-opacity", mouseOpt);
+          tooltip.html(function() {
+              var name = "Picture Microform: " + Math.ceil((Math.pow(picture, 3))) + " Resources";
+              return name;
+          });
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("opacity", 0);});
+Ring500.on('mouseout', function() {Ring500.attr("fill-opacity", Tran)});   
+    
+//=================================Button====================================//
+var D = 2000;        
+var P = -40;  
+var TextButtonCollor = 'black';
+var W123 = -170;
+    
+var rectbackground = svg.append("rect")
+    .attr("x", "-60%")
+    .attr("y", "-23%")
+    .attr("width", 105) 
+    .attr("height", 240)
+    .attr('fill', 'white')
+    .attr('fill-opacity', 0.75)
+    
+var legendJournal = svg.append("rect")
+    .attr("x", "-59.5%")
+    .attr("y", "-22%")
+    .attr("width", 20) 
+    .attr("height", 20)
+    .attr('fill', '#996633')
+
+var legendBook = svg.append("rect")
+    .attr("x", "-59.5%")
+    .attr("y", "-14%")
+    .attr("width", 20) 
+    .attr("height", 20)
+    .attr('fill', '#CCCC99')
+
+var legendMusic = svg.append("rect")
+    .attr("x", "-59.5%")
+    .attr("y", "-6%")
+    .attr("width", 20) 
+    .attr("height", 20)
+    .attr('fill', '#bcc87c')
+
+var legendMap = svg.append("rect")
+    .attr("x","-59.5%")
+    .attr("y", "2%")
+    .attr("width", 20) 
+    .attr("height", 20)
+    .attr('fill', '#e98d3f')
+
+var legendPictures = svg.append("rect")
+    .attr("x", "-59.5%")
+    .attr("y", "10%")
+    .attr("width", 20) 
+    .attr("height", 20)
+    .attr('fill', '#e3c44f')
+
+
+var Ltext1 = svg.append('text').text('Journals')
+    .attr('x', "-57%")
+    .attr('y', "-19.75%")
+    .attr('fill', TextButtonCollor)   
+
+var Ltext2 = svg.append('text').text('Books')
+    .attr('x', "-57%")
+    .attr('y', "-11.75%")
+    .attr('fill', TextButtonCollor)
+
+var Ltext3 = svg.append('text').text('Music')
+    .attr('x', "-57%")
+    .attr('y', "-3.75%")
+    .attr('fill', TextButtonCollor)
+
+var Ltext4 = svg.append('text').text('Maps')
+    .attr('x', "-57%")
+    .attr('y', "4.5%")
+    .attr('fill', TextButtonCollor)
+
+var Ltext5 = svg.append('text').text('Pictures')
+    .attr('x', "-57%")
+    .attr('y', "12.5%")
+    .attr('fill', TextButtonCollor)
+
+var Tempback = svg.append("rect")
+    .attr("x", '-12%')
+    .attr("y", '-45%')
+    .attr("width", 275) 
+    .attr("height", 25)
+    .attr('fill', 'white')
+    .attr('fill-opacity', 0.75)
+
+var TempText = svg.append('text').text(Title + " : " + ArcValue + " Results")
+    .attr('x', '-11.5%')
+    .attr('y', '-42%')
+    .attr('fill', TextButtonCollor)
+
+setInterval(function() {
+    TempText.text(Title + " : " + ArcValue + " Results")
+},100);
+
+</script>
+<!-- 
+http://schoolofdata.org/2013/10/01/pie-and-donut-charts-in-d3-js/
+http://stackoverflow.com/questions/11007640/fit-text-into-svg-element-using-d3-js
+http://www.w3schools.com/jsref/met_win_setinterval.asp
+http://jsfiddle.net/je_et/eaLEr/
+-->
