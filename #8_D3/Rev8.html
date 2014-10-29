@@ -1941,23 +1941,6 @@ var Ltext5 = svg.append('text').text('Pictures')
     .attr('y', "12.5%")
     .attr('fill', TextButtonCollor)
 
-var Tempback = svg.append("rect")
-    .attr("x", '-12%')
-    .attr("y", '-45%')
-    .attr("width", 275) 
-    .attr("height", 25)
-    .attr('fill', 'white')
-    .attr('fill-opacity', 0.75)
-
-var TempText = svg.append('text').text(Title + " : " + ArcValue + " Results")
-    .attr('x', '-11.5%')
-    .attr('y', '-42%')
-    .attr('fill', TextButtonCollor)
-
-setInterval(function() {
-    TempText.text(Title + " : " + ArcValue + " Results")
-},100);
-
 </script>
 <!-- 
 http://schoolofdata.org/2013/10/01/pie-and-donut-charts-in-d3-js/
